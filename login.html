@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login with Auth0</title>
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/1.19/auth0-spa-js.production.js"></script>
+</head>
+<body>
+  <h1>Velkommen til TerpBot</h1>
+  <button id="login">Logg inn</button>
+  <button id="logout" style="display:none">Logg ut</button>
+  <p id="status"></p>
+
+  <script>
+    const auth0 = await createAuth0Client({
+      domain: "dev-hkf6zkx2yanwkvnh.us.auth0.com",
+      client_id: "CRkJKh3ety5IqDjQjWaE4O8xtz06ltXV",
+      cacheLocation: "localstorage"
+    });
+
+    async function updateUI() {
+      const isAuthenticated = await auth0.isAuthenticated();
+      const loginBtn = document.getElementById("login");
+      const logoutBtn = document.getElementById("logout");
+      const status = document.getElementById("status");
+
+      if (isAuthenticated) {
+        const user = await auth0.getUser();
+        loginBtn.style.display = "none";
+        logoutBtn.style.display = "inline-block";
+        status.innerText = `Logget inn som ${user.name || user.email}`;
+      } else {
+        loginBtn.style.display =
